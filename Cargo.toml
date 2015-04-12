@@ -3,4 +3,10 @@
 name = "latest"
 version = "0.0.1"
 authors = ["mitchmindtree <mitchell.nordine@gmail.com>"]
+description = "A channel-esque type that only stores the last value that was sent."
+readme = "README.md"
+keywords = ["channel", "last", "current", "most-recent", "state"]
+license = "MIT"
+repository = "https://github.com/mitchmindtree/latest.git"
+homepage = "https://github.com/mitchmindtree/latest"
 
