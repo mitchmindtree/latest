@@ -1,0 +1,13 @@
+language: rust
+
+rust:
+    - nightly
+
+os:
+    - osx
+    - linux
+
+script:
+    - cargo build --verbose
+    - cargo test --verbose
+    - cargo doc --verbose
