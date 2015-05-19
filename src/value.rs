@@ -44,10 +44,10 @@ impl<T: Send> Sender<T> {
     pub fn send(&self, t: T) -> Result<(), SendError<T>> {
         unsafe {
             let data_ptr = (*self.data.get()).get();
-            *data_ptr = match (*data_ptr).downgrade().upgrade() {
-                Some(data) => data,
-                None => return Err(SendError(t)),
-            };
+            // *data_ptr = match (*data_ptr).downgrade().upgrade() {
+            //     Some(data) => data,
+            //     None => return Err(SendError(t)),
+            // };
             match (*data_ptr).lock() {
                 Ok(mut guard) => *guard = Some(t),
                 Err(_) => return Err(SendError(t)),
@@ -62,10 +62,10 @@ impl<T: Send> Sender<T> {
     pub fn try_send(&self, t: T) -> Result<(), TrySendError<T>> {
         unsafe {
             let data_ptr = (*self.data.get()).get();
-            *data_ptr = match (*data_ptr).downgrade().upgrade() {
-                Some(data) => data,
-                None => return Err(TrySendError::ChannelClosed(t)),
-            };
+            // *data_ptr = match (*data_ptr).downgrade().upgrade() {
+            //     Some(data) => data,
+            //     None => return Err(TrySendError::ChannelClosed(t)),
+            // };
             match (*data_ptr).try_lock() {
                 Ok(mut guard) => *guard = Some(t),
                 Err(err) => match err {
@@ -112,10 +112,10 @@ impl<T: Send> Receiver<T> {
     pub fn recv(&self) -> Result<T, RecvError> {
         unsafe {
             let data_ptr = self.data.get();
-            *data_ptr = match (*data_ptr).downgrade().upgrade() {
-                Some(data) => data,
-                None => return Err(RecvError::ChannelClosed),
-            };
+            // *data_ptr = match (*data_ptr).downgrade().upgrade() {
+            //     Some(data) => data,
+            //     None => return Err(RecvError::ChannelClosed),
+            // };
             match (*data_ptr).lock() {
                 Ok(mut guard) => match guard.take() {
                     Some(t) => Ok(t),
@@ -131,10 +131,10 @@ impl<T: Send> Receiver<T> {
     pub fn try_recv(&self) -> Result<T, TryRecvError> {
         unsafe {
             let data_ptr = self.data.get();
-            *data_ptr = match (*data_ptr).downgrade().upgrade() {
-                Some(data) => data,
-                None => return Err(TryRecvError::ChannelClosed),
-            };
+            // *data_ptr = match (*data_ptr).downgrade().upgrade() {
+            //     Some(data) => data,
+            //     None => return Err(TryRecvError::ChannelClosed),
+            // };
             match (*data_ptr).try_lock() {
                 Ok(mut guard) => match guard.take() {
                     Some(t) => Ok(t),

@@ -48,10 +48,10 @@ impl<K: Send + Hash + Eq, V: Send> Sender<K, V> {
     pub fn send(&self, key: K, value: V) -> Result<(), SendError<K, V>> {
         unsafe {
             let data_ptr = (*self.data.get()).get();
-            *data_ptr = match (*data_ptr).downgrade().upgrade() {
-                Some(data) => data,
-                None => return Err(SendError(key, value)),
-            };
+            // *data_ptr = match (*data_ptr).downgrade().upgrade() {
+            //     Some(data) => data,
+            //     None => return Err(SendError(key, value)),
+            // };
             match (*data_ptr).lock() {
                 Ok(mut guard) => {
                     guard.insert(key, Some(value));
@@ -68,10 +68,10 @@ impl<K: Send + Hash + Eq, V: Send> Sender<K, V> {
     pub fn try_send(&self, key: K, value: V) -> Result<(), TrySendError<K, V>> {
         unsafe {
             let data_ptr = (*self.data.get()).get();
-            *data_ptr = match (*data_ptr).downgrade().upgrade() {
-                Some(data) => data,
-                None => return Err(TrySendError::ChannelClosed(key, value)),
-            };
+            // *data_ptr = match (*data_ptr).downgrade().upgrade() {
+            //     Some(data) => data,
+            //     None => return Err(TrySendError::ChannelClosed(key, value)),
+            // };
             match (*data_ptr).try_lock() {
                 Ok(mut guard) => {
                     guard.insert(key, Some(value));
@@ -110,10 +110,10 @@ impl<K: Send + Hash + Eq + Clone, V: Send> Receiver<K, V> {
     pub fn recv(&self) -> Result<Vec<(K, V)>, RecvError> {
         unsafe {
             let data_ptr = self.data.get();
-            *data_ptr = match (*data_ptr).downgrade().upgrade() {
-                Some(data) => data,
-                None => return Err(RecvError),
-            };
+            // *data_ptr = match (*data_ptr).downgrade().upgrade() {
+            //     Some(data) => data,
+            //     None => return Err(RecvError),
+            // };
             match (*data_ptr).lock() {
                 Ok(mut guard) => {
                     Ok(guard.iter_mut().filter_map(|(key, value)| {
@@ -134,10 +134,10 @@ impl<K: Send + Hash + Eq + Clone, V: Send> Receiver<K, V> {
     pub fn try_recv(&self) -> Result<Vec<(K, V)>, TryRecvError> {
         unsafe {
             let data_ptr = self.data.get();
-            *data_ptr = match (*data_ptr).downgrade().upgrade() {
-                Some(data) => data,
-                None => return Err(TryRecvError::ChannelClosed),
-            };
+            // *data_ptr = match (*data_ptr).downgrade().upgrade() {
+            //     Some(data) => data,
+            //     None => return Err(TryRecvError::ChannelClosed),
+            // };
             match (*data_ptr).try_lock() {
                 Ok(mut guard) => {
                     Ok(guard.iter_mut().filter_map(|(key, value)| {
