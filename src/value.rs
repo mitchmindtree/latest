@@ -24,7 +24,7 @@ impl<T: Send> Clone for Sender<T> {
 }
 
 /// We need an unsafe implementation of Send because of the UnsafeCell.
-unsafe impl<T> Send for Sender<T> {}
+unsafe impl<T> Send for Sender<T> where T: Send {}
 
 /// The Receiver was dropped and the channel was closed.
 pub struct SendError<T>(T);
