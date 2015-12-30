@@ -29,9 +29,11 @@ impl<K: Send, V: Send> Clone for Sender<K, V> {
 unsafe impl<K, V> Send for Sender<K, V> where K: Send, V: Send {}
 
 /// The Receiver was dropped and the channel was closed.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct SendError<K, V>(K, V);
 
 /// An enumeration of the different possible try_send errors.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum TrySendError<K, V> {
     /// The Receiver was dropped and the channel was closed.
     ChannelClosed(K, V),
@@ -93,9 +95,11 @@ pub struct Receiver<K: Send, V: Send> {
 }
 
 /// The Sender was dropped and the channel was closed.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct RecvError;
 
 /// An enumeration of the different possible try_recv errors.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum TryRecvError {
     /// The Senders were dropped and the channel was closed.
     ChannelClosed,
